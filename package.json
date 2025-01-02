@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "prettier": "prettier ./**/*.ts tsconfig.json package.json --write",
-    "lint": "eslint '{src/**/*.ts,index.ts,test/**/*.ts,script/**/*.ts}'",
+    "lint": "eslint {src/**/*.ts,index.ts,test/**/*.ts,script/**/*.ts}",
     "start": "ts-node src/index.ts",
     "test": "vitest --run"
   },
