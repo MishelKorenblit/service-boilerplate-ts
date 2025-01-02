@@ -1,4 +1,4 @@
-import { CurrentWeather, Location, OpenWeatherAPI } from 'openweather-api-node'
+import { CurrentWeather, Location, OpenWeatherAPI, DailyWeather } from 'openweather-api-node'
 
 export class OpenWeatherDriver {
   constructor(private apiKey: string) {
@@ -10,6 +10,9 @@ export class OpenWeatherDriver {
     return await this.openWeatherAPI.getCurrent({ coordinates: { lat, lon } })
   }
 
+  public async getDateWeatherByCityName(limit: number, cityName: string): Promise<DailyWeather[]> {
+    return await this.openWeatherAPI.getDailyForecast(limit, true, { locationName: cityName })
+  }
   public async getCityForLocation(lat: number, lon: number): Promise<Location | null> {
     return this.openWeatherAPI.getLocation({ coordinates: { lat, lon } })
   }
