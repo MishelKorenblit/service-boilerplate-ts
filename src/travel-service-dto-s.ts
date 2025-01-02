@@ -4,3 +4,6 @@ export interface CurrentWeatherDTO {
   temperature: number
   feelsLike: number
 }
+export interface CurrentClothesDTO {
+  recommendedClothing: string
+}
