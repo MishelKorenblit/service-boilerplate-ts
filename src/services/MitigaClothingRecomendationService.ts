@@ -15,7 +15,7 @@ export class MitigaClothingRecommendationService {
         const limit = diffTime + 1;
 
         const promises: Promise<unknown>[] = []
-        promises.push(this.openWeatherDriver.getDateWeatherByCityName(limit, city))
+        promises.push(this.openWeatherDriver.getForecastWeatherByCityName(limit, city))
         try {
             const [weather] = (await Promise.all(promises)) as [DailyWeather[]];
             const relevantWeatherDate = weather[weather.length - 1];

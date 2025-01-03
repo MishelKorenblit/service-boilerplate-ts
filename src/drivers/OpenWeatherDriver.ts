@@ -10,7 +10,7 @@ export class OpenWeatherDriver {
     return await this.openWeatherAPI.getCurrent({ coordinates: { lat, lon } })
   }
 
-  public async getDateWeatherByCityName(limit: number, cityName: string): Promise<DailyWeather[]> {
+  public async getForecastWeatherByCityName(limit: number, cityName: string): Promise<DailyWeather[]> {
     return await this.openWeatherAPI.getDailyForecast(limit, true, { locationName: cityName })
   }
   public async getCityForLocation(lat: number, lon: number): Promise<Location | null> {
