@@ -2,7 +2,8 @@ import createHttpError from 'http-errors'
 import { OpenWeatherDriver } from '../drivers/OpenWeatherDriver'
 import { CurrentClothesDTO } from '../travel-service-dto-s'
 import { DailyWeather } from 'openweather-api-node'
-import { getPartOfTheDay, recommendedClothing } from '../utills/clothingUtils'
+import { getPartOfTheDay, partOfTheDay } from '../utills/clothingUtils'
+import type { ClothesOptions, PartOfTheDay } from '../utills/clothingUtils'
 
 export class MitigaClothingRecommendationService {
     constructor(private readonly openWeatherDriver: OpenWeatherDriver) { }
@@ -21,7 +22,7 @@ export class MitigaClothingRecommendationService {
             const relevantWeatherDate = weather[weather.length - 1];
             const currentWeather = relevantWeatherDate.weather.temp[partOfTheDay];
             const weatherCondition = relevantWeatherDate.weather.description;
-            const clothesToWear = recommendedClothing(currentWeather, partOfTheDay, weatherCondition);
+            const clothesToWear = getClothingRecommendation(currentWeather, partOfTheDay, weatherCondition);
             return {
                 recommendedClothing: clothesToWear.toString()
             }
@@ -30,3 +31,22 @@ export class MitigaClothingRecommendationService {
         }
     }
 }
+
+export const getClothingRecommendation = (
+    temperature: number,
+    timeOfDay: PartOfTheDay,
+    weatherConditions: string
+): ClothesOptions[] => {
+    if (weatherConditions === 'Rainy') return ['Raincoat', 'Umbrella'];
+    if (temperature > 18 && timeOfDay !== partOfTheDay.night && weatherConditions === 'Sunny') return ['T-shirt', 'Shorts'];
+    if (timeOfDay == partOfTheDay.morning || timeOfDay == partOfTheDay.afternoon) {
+        if (weatherConditions === 'Sunny') return ['Sunglasses'];
+    }
+    if (temperature >= 10 && temperature <= 18) {
+        if (timeOfDay === partOfTheDay.morning || timeOfDay === partOfTheDay.afternoon) return ['Light jacket', 'Long pants'];
+        if (timeOfDay === partOfTheDay.evening) return ['Light sweater', 'Long pants'];
+    }
+    if (temperature < 10) return ['Heavy coat', 'Gloves'];
+
+    return [`No recommendation available why aren't you sleeping?`];
+};
